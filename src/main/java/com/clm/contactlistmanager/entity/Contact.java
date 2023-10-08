@@ -1,11 +1,11 @@
-package com.clm.contactlistmanager;
+package com.clm.contactlistmanager.entity;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.Date;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 //Specifies the Contact is JPA entity
 @Entity
 
