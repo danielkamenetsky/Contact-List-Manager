@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import com.clm.contactlistmanager.dto.NoteDTO;
+import com.clm.contactlistmanager.exceptions.ResourceNotFoundException;
+import com.clm.contactlistmanager.exceptions.InvalidInputException;
 
 
 import java.util.List;
@@ -29,13 +31,18 @@ public class NoteService {
 
     // Fetch a specific note by ID
     public Note getNoteById(Long id) {
-        return noteRepository.findById(id).orElse(null);
+        return noteRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Note not found with id: " + id)
+        );
     }
-
     // Add a new note
     public Note addNote(@Valid Note note) {
+        if (note.getNoteText() == null) {
+            throw new InvalidInputException("Note text cannot be null.");
+        }
         return noteRepository.save(note);
     }
+
 
     // Update an existing note
     public Note updateNote(Note note) {

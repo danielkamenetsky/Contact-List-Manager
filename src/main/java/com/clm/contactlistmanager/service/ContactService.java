@@ -7,6 +7,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import com.clm.contactlistmanager.dto.ContactDTO;
+import com.clm.contactlistmanager.exceptions.ResourceNotFoundException;
+import com.clm.contactlistmanager.exceptions.InvalidInputException;
+
 
 
 import java.util.List;
@@ -24,11 +27,16 @@ public class ContactService {
 
     // Get one contact using its ID.
     public Contact getContactById(Long id) {
-        return contactRepository.findById(id).orElse(null);  // If the contact isn't found, we'll get back null.
+        return contactRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Contact not found with id: " + id)
+        );
     }
 
     // Save a new contact or update an existing one.
     public Contact saveContact(@Valid Contact contact) {
+        if (contact.getFirstName() == null || contact.getLastName() == null) {
+            throw new InvalidInputException("Contact's first name and last name cannot be null.");
+        }
         return contactRepository.save(contact);
     }
 
