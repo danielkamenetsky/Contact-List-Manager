@@ -16,6 +16,8 @@ public class Note {
     @Column(name = "contact_id")
     private Long contactId;
 
+    // Ensure note text is not empty
+    @NotEmpty(message = "Note text cannot be empty")
     @Column(name = "note_text")
     private String noteText;
 
