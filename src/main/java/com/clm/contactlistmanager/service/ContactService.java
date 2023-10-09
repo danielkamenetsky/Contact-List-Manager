@@ -1,11 +1,13 @@
 package com.clm.contactlistmanager.service;
-
+import jakarta.validation.Valid;
 import com.clm.contactlistmanager.entity.Contact;
 import com.clm.contactlistmanager.repositories.ContactRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import com.clm.contactlistmanager.dto.ContactDTO;
+
 
 import java.util.List;
 
@@ -26,7 +28,7 @@ public class ContactService {
     }
 
     // Save a new contact or update an existing one.
-    public Contact saveContact(Contact contact) {
+    public Contact saveContact(@Valid Contact contact) {
         return contactRepository.save(contact);
     }
 
@@ -34,6 +36,29 @@ public class ContactService {
     public Page<Contact> findAll(Pageable pageable) {
         return contactRepository.findAll(pageable);
     }
+    // This method converts a Contact entity into a ContactDTO format.
+    // Convert a Contact entity to ContactDTO
+    private ContactDTO convertToDTO(Contact contact) {
+        ContactDTO dto = new ContactDTO();
+        dto.setId(contact.getId());
+        dto.setFirstName(contact.getFirstName());
+        dto.setLastName(contact.getLastName());
+        dto.setPhoneNumber(contact.getPhoneNumber());
+        dto.setEmail(contact.getEmail());
+        dto.setAddress(contact.getAddress());
+        return dto;
+    }
 
+    // Convert a ContactDTO to Contact entity
+    private Contact convertToEntity(ContactDTO dto) {
+        Contact contact = new Contact();
+        contact.setId(dto.getId());
+        contact.setFirstName(dto.getFirstName());
+        contact.setLastName(dto.getLastName());
+        contact.setPhoneNumber(dto.getPhoneNumber());
+        contact.setEmail(dto.getEmail());
+        contact.setAddress(dto.getAddress());
+        return contact;
+    }
 }
 

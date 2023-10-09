@@ -1,64 +1,53 @@
-package com.clm.contactlistmanager.entity;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.persistence.*;
+package com.clm.contactlistmanager.dto;
 import java.util.Date;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 
 
+// This is a Data Transfer Object (DTO) for our Note.
+// We use this class to share note data in a specific format
+public class NoteDTO {
 
-@Entity
-@Table(name = "notes")
-public class Note {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    // Attributes for the Note data transfer object
     private Long id;
-
-    @Column(name = "contact_id")
     private Long contactId;
-
-    // Ensure note text is not empty
-    @NotEmpty(message = "Note text cannot be empty")
-    @Column(name = "note_text")
     private String noteText;
-
-    @Column(name = "date_created")
-    @Temporal(TemporalType.TIMESTAMP)
     private Date dateCreated;
 
-    public Note() {
-        // Default constructor
-    }
-
+    // Getter for ID
     public Long getId() {
         return id;
     }
 
+    // Getter for the associated contact's ID
     public Long getContactId() {
         return contactId;
     }
 
+    // Getter for the note text
     public String getNoteText() {
         return noteText;
     }
 
+    // Getter for the date the note was created
     public Date getDateCreated() {
         return dateCreated;
     }
 
+    // Setter for ID
     public void setId(Long id) {
         this.id = id;
     }
 
+    // Setter for the associated contact's ID
     public void setContactId(Long contactId) {
         this.contactId = contactId;
     }
 
+    // Setter for the note text
     public void setNoteText(String noteText) {
         this.noteText = noteText;
     }
 
+    // Setter for the date the note was created
     public void setDateCreated(Date dateCreated) {
         this.dateCreated = dateCreated;
     }

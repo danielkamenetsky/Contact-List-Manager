@@ -1,11 +1,13 @@
 package com.clm.contactlistmanager.service;
-
+import jakarta.validation.Valid;
 import com.clm.contactlistmanager.entity.Note;
 import com.clm.contactlistmanager.repositories.NoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import com.clm.contactlistmanager.dto.NoteDTO;
+
 
 import java.util.List;
 
@@ -31,7 +33,7 @@ public class NoteService {
     }
 
     // Add a new note
-    public Note addNote(Note note) {
+    public Note addNote(@Valid Note note) {
         return noteRepository.save(note);
     }
 
@@ -43,5 +45,24 @@ public class NoteService {
     // Delete a note by ID
     public void deleteNote(Long id) {
         noteRepository.deleteById(id);
+    }
+    // Convert an entity to a DTO
+    private NoteDTO convertToDTO(Note note) {
+        NoteDTO dto = new NoteDTO();
+        dto.setId(note.getId());
+        dto.setContactId(note.getContactId());
+        dto.setNoteText(note.getNoteText());
+        dto.setDateCreated(note.getDateCreated());
+        return dto;
+    }
+
+    // Convert a DTO to an entity
+    private Note convertFromDTO(NoteDTO dto) {
+        Note note = new Note();
+        note.setId(dto.getId());
+        note.setContactId(dto.getContactId());
+        note.setNoteText(dto.getNoteText());
+        note.setDateCreated(dto.getDateCreated());
+        return note;
     }
 }
