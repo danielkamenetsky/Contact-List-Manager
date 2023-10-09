@@ -4,6 +4,8 @@ import com.clm.contactlistmanager.entity.Note;
 import com.clm.contactlistmanager.repositories.NoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -13,7 +15,12 @@ public class NoteService {
     @Autowired
     private NoteRepository noteRepository;
 
-    // Fetch all notes
+    // This function gets all notes, but not all at once, only a page at a time.
+    public Page<Note> findAll(Pageable pageable) {
+        return noteRepository.findAll(pageable);
+    }
+
+    // Fetch all notes without pagination
     public List<Note> getAllNotes() {
         return noteRepository.findAll();
     }
