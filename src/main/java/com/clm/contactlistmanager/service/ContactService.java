@@ -4,6 +4,8 @@ import com.clm.contactlistmanager.entity.Contact;
 import com.clm.contactlistmanager.repositories.ContactRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -26,6 +28,11 @@ public class ContactService {
     // Save a new contact or update an existing one.
     public Contact saveContact(Contact contact) {
         return contactRepository.save(contact);
+    }
+
+    // Get a part of the contacts.
+    public Page<Contact> findAll(Pageable pageable) {
+        return contactRepository.findAll(pageable);
     }
 
 }
