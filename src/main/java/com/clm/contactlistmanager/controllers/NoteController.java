@@ -33,12 +33,6 @@ public class NoteController {
     }
 
 
-    // Get all notes
-    @GetMapping
-    public ResponseEntity<List<Note>> getAllNotes() {
-        return ResponseEntity.ok().body(noteService.getAllNotes());
-    }
-
     // Get a specific note by its ID
     @GetMapping("/{id}")
     public ResponseEntity<Note> getNoteById(@PathVariable Long id) {
@@ -57,7 +51,7 @@ public class NoteController {
     @PutMapping("/{id}")
     public ResponseEntity<Note> updateNote(@PathVariable Long id, @Valid @RequestBody Note noteDetails) {
         Note note = noteService.getNoteById(id);
-        note.setNoteText(noteDetails.getNoteText()); 
+        note.setNoteText(noteDetails.getNoteText());
         return ResponseEntity.ok().body(noteService.updateNote(note));
     }
 
