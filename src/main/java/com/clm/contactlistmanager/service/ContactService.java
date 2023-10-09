@@ -39,6 +39,11 @@ public class ContactService {
         }
         return contactRepository.save(contact);
     }
+    // Delete a contact
+    public void deleteContact(Long id) {
+        contactRepository.deleteById(id);
+    }
+
 
     // Get a part of the contacts.
     public Page<Contact> findAll(Pageable pageable) {
