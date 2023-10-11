@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
 @Configuration
 public class SecurityConfig {
@@ -52,9 +53,9 @@ public class SecurityConfig {
         http.authorizeHttpRequests
                 (authorize -> authorize
                         // Only users with 'read' authority can access '/user'.
-                        .requestMatchers("/user").hasAuthority("read")
+                        .requestMatchers(antMatcher("/user")).hasAuthority("read")
                         // Only users with 'write' authority can access '/admin'.
-                        .requestMatchers("/admin").hasAuthority("write"));
+                        .requestMatchers(antMatcher("/admin")).hasAuthority("write"));
 
         return http.build();
     }
