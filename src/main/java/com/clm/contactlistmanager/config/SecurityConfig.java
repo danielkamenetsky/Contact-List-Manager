@@ -2,11 +2,12 @@ package com.clm.contactlistmanager.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
@@ -15,47 +16,42 @@ import static org.springframework.security.web.util.matcher.AntPathRequestMatche
 @Configuration
 public class SecurityConfig {
 
-    // Configuring the UserDetailsService bean. This is used to fetch user details.
+    // This bean provides in-memory user details service.
     @Bean
     public UserDetailsService userDetailsService() {
-        // Creating an in-memory user details service.
-        var userDetailsService = new InMemoryUserDetailsManager();
-
-        // Defining two users with different usernames, passwords, and authorities.
-        UserDetails user1 = User.withUsername("Daniel").password("1234")
-                .authorities("write").build();
-        UserDetails user2 = User.withUsername("James").password("123")
-                .authorities("read").build();
-
-        // Adding the defined users to the in-memory user details service.
-        userDetailsService.createUser(user1);
-        userDetailsService.createUser(user2);
-
-        return userDetailsService;
+        // Define users in memory with their username, password, and authorities.
+        var manager = new InMemoryUserDetailsManager();
+        manager.createUser(User.withUsername("Daniel").password(passwordEncoder().encode("1234")).authorities("write").build());
+        manager.createUser(User.withUsername("James").password(passwordEncoder().encode("123")).authorities("read").build());
+        return manager;
     }
 
-    // Configuring the PasswordEncoder bean. It defines how passwords are encoded.
-    @SuppressWarnings("deprecation")
+    // This bean provides authentication provider that uses the custom UserDetailsService and BCrypt password encoder.
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(userDetailsService());
+        provider.setPasswordEncoder(passwordEncoder());
+        return provider;
+    }
+
+    // Password encoder bean. BCrypt is used here as it's a strong hashing function.
     @Bean
     public PasswordEncoder passwordEncoder() {
-        // NoOpPasswordEncoder means passwords are stored as-is without any encoding.
-        // This is not secure for production use.
-        return NoOpPasswordEncoder.getInstance();
+        return new BCryptPasswordEncoder();
     }
 
-    // Configuring the HTTP security filter chain. This defines how HTTP requests are secured.
+    // Security configuration for HTTP requests.
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        // Configuring form-based authentication.
-        http.formLogin(form -> form.getClass());
-
-        // Configuring authorization rules for specific endpoints.
-        http.authorizeHttpRequests
-                (authorize -> authorize
-                        // Only users with 'read' authority can access '/user'.
-                        .requestMatchers(antMatcher("/user")).hasAuthority("read")
-                        // Only users with 'write' authority can access '/admin'.
-                        .requestMatchers(antMatcher("/admin")).hasAuthority("write"));
+        http
+                // Define authorization rules.
+                .authorizeRequests()
+                .requestMatchers(antMatcher("/user")).hasAuthority("read")
+                .requestMatchers(antMatcher("/admin")).hasAuthority("write")
+                .and()
+                // Use default form login configuration.
+                .formLogin(Customizer.withDefaults());
 
         return http.build();
     }
