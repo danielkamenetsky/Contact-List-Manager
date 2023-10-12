@@ -9,11 +9,17 @@ import org.springframework.data.domain.Pageable;
 import com.clm.contactlistmanager.dto.ContactDTO;
 import com.clm.contactlistmanager.exceptions.ResourceNotFoundException;
 import com.clm.contactlistmanager.exceptions.InvalidInputException;
-
-
-
 import java.util.List;
 
+
+/**
+ * Service class responsible for handling business logic associated with Contacts.
+ * This includes operations like fetching all contacts, retrieving a specific contact by ID,
+ * saving a new contact, updating an existing contact, and deleting a contact.
+ * The service uses the ContactRepository for data access and performs necessary
+ * transformations, validations, and exception handling. Additionally, it's responsible
+ * for converting between Contact entities and ContactDTOs.
+ */
 @Service  // This tells Spring that our class is a special 'service' class.
 public class ContactService {
 
@@ -39,6 +45,7 @@ public class ContactService {
         }
         return contactRepository.save(contact);
     }
+
     // Delete a contact
     public void deleteContact(Long id) {
         contactRepository.deleteById(id);
@@ -49,7 +56,7 @@ public class ContactService {
     public Page<Contact> findAll(Pageable pageable) {
         return contactRepository.findAll(pageable);
     }
-    // This method converts a Contact entity into a ContactDTO format.
+
     // Convert a Contact entity to ContactDTO
     private ContactDTO convertToDTO(Contact contact) {
         ContactDTO dto = new ContactDTO();

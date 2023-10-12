@@ -9,9 +9,16 @@ import org.springframework.data.domain.Pageable;
 import com.clm.contactlistmanager.dto.NoteDTO;
 import com.clm.contactlistmanager.exceptions.ResourceNotFoundException;
 import com.clm.contactlistmanager.exceptions.InvalidInputException;
-
-
 import java.util.List;
+
+/**
+ * Service class responsible for handling business logic associated with Notes.
+ * This includes operations like fetching all notes, retrieving a specific note by ID,
+ * saving a new note, updating an existing note, and deleting a note.
+ * The service uses the NoteRepository for data access and performs necessary
+ * transformations, validations, and exception handling. Additionally, it's responsible
+ * for converting between Note entities and NoteDTOs.
+ */
 
 @Service
 public class NoteService {

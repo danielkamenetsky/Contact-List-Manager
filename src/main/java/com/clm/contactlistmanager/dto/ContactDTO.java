@@ -1,7 +1,10 @@
 package com.clm.contactlistmanager.dto;
 
-// This is a Data Transfer Object for our Contact.
-// This class is used to share contact data in a specific format.
+/**
+ * This DTO provides a representation of
+ * a Contact that can be used in API responses or requests, abstracting away certain
+ * details of the underlying entity.
+ */
 public class ContactDTO {
 
     // Attributes for the Contact data transfer object

@@ -1,9 +1,9 @@
 package com.clm.contactlistmanager.dto;
 import java.util.Date;
-
-
-// This is a Data Transfer Object (DTO) for our Note.
-// We use this class to share note data in a specific format
+/**
+ * This DTO provides a representation of a Note that can be used in
+ * API responses or requests, abstracting away certain details of the underlying entity.
+ */
 public class NoteDTO {
 
     // Attributes for the Note data transfer object
