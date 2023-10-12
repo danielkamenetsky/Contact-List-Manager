@@ -8,8 +8,13 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-//Specifies the Contact is JPA entity
-@Entity
+
+
+/**
+ * Represents a Contact entity with fields corresponding to contact details.
+ * This entity is used to store contact-related information in the database.
+*/
+ @Entity
 
 @Table(name = "contacts")
 public class Contact {
@@ -19,32 +24,32 @@ public class Contact {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // First name must not be empty or null
+    // First name of the contact
     @NotNull(message = "First name cannot be empty")
-    // Sets a min of 1 and max of 100 chars for the first name
     @Size(min = 1, max = 100, message = "First name should be between 1 and 100 chars")
-    // Specifies that this field will be mapped to a database column with the same name.
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
+    // Last name of the contact
     @NotNull(message = "Last name cannot be empty")
     @Size(min = 1, max = 100, message = "Last name should be between 1 and 100 chars")
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
+    // Phone number of the contact
     @NotNull(message = "Phone number cannot be empty")
     @Size(min = 1, max = 10, message = "Phone number should be between 1 and 10 chars")
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
+    // Email of the contact
     @NotNull(message = "Email cannot be empty")
-    // Sets a min of 1 and max of 100 chars for the first name
     @Size(min = 1, max = 50, message = "Email should be between 1 and 50 chars")
     @Column(name = "email", nullable = false)
     private String email;
 
+    // Address of the contact
     @NotNull(message = "Address cannot be empty")
-    // This sets a minimum of 1 and a maximum of 255 characters for the address
     @Size(min = 1, max = 150, message = "Address should be between 1 and 150 chars")
     @Column(name = "address", nullable = false)
     private String address;
@@ -56,6 +61,7 @@ public class Contact {
     private Date dateCreated;
 
 
+    // Below are standard getter and setter methods
     public Long getId() {
         return id;
     }

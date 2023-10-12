@@ -44,7 +44,9 @@ public class SecurityConfig {
     // Security configuration for HTTP requests.
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
+        //Disabling CSRF (Cross-Site Request Forgery) so application does not
+       // require CSRF tokens to be sent with state-changing requests (like POST, PUT, DELETE) for testing purposes.
+                http.csrf(csrf -> csrf.disable())
                 // Define authorization rules.
                 .authorizeRequests()
                 .requestMatchers(antMatcher("/user")).hasAuthority("read")
