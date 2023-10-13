@@ -9,7 +9,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
-@Service  // Indicates that this class is a service.
+/**
+ * Service class responsible for retrieving user details.
+ * Implements the UserDetailsService interface from Spring Security.
+ * Used during the authentication process to load user-specific data and validate credentials.
+ */
+@Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;

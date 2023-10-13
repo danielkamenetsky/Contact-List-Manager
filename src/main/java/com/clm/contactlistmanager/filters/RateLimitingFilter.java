@@ -8,11 +8,13 @@ import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-
-// Importing Guava's RateLimiter
 import com.google.common.util.concurrent.RateLimiter;
 
-// Declaring our filter class
+/**
+ * This is a custom filter that intercepts incoming HTTP requests to apply rate limiting rules.
+ * It prevents clients from making too many requests within a set timeframe, thereby ensuring fair usage and preventing potential misuse.
+ */
+
 public class RateLimitingFilter implements Filter {
 
     // Creating a RateLimiter instance which allows 1 request per second
@@ -23,7 +25,7 @@ public class RateLimitingFilter implements Filter {
     public void init(FilterConfig filterConfig) throws ServletException {
     }
 
-    // This is where the actual rate limiting logic happens
+    //Implements the rate limiting logic for incoming HTTP requests.
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain)
             throws IOException, ServletException {

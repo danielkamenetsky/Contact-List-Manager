@@ -3,6 +3,12 @@ package com.clm.contactlistmanager.entity;
 import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
+/**
+ * Represents a Role entity which defines specific roles for user authorization.
+ * Each user can have multiple roles, and each role can grant different levels of access
+ * to specific functionalities in the application. Examples of roles include "ADMIN", "USER", etc.
+ * The relationship between a user and its roles is modeled as a many-to-many.
+ */
 
 @Entity  // Indicates that this is an entity class and should be mapped to a database table.
 @Table(name = "roles")  // Specifies the name of the database table to be used.

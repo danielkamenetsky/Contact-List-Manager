@@ -8,6 +8,11 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 import java.util.function.Function;
 
+/**
+ * Utility class for JWT operations.
+ * Provides methods to generate, validate and parse JWTs.
+ * Uses the io.jsonwebtoken library to handle JWT creation and validation.
+ */
 @Component  // This tells Spring that this class is a special helper (utility) class
 public class JwtUtil {
 

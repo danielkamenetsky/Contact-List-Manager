@@ -12,8 +12,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
-
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 @Configuration
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     // This bean provides in-memory user details service.
@@ -49,10 +51,9 @@ public class SecurityConfig {
                 http.csrf(csrf -> csrf.disable())
                 // Define authorization rules.
                 .authorizeRequests()
-                .requestMatchers(antMatcher("/user")).hasAuthority("read")
-                .requestMatchers(antMatcher("/admin")).hasAuthority("write")
+                .requestMatchers(antMatcher(HttpMethod.DELETE, "/api/v1/contacts/**")).hasRole("ADMIN")
+                .requestMatchers(antMatcher("/api/v1/contacts/**")).hasAnyRole("ADMIN", "USER")
                 .and()
-                // Use default form login configuration.
                 .formLogin(Customizer.withDefaults());
 
         return http.build();

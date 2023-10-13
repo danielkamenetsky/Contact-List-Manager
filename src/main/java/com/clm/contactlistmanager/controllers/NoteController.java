@@ -7,26 +7,25 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.security.access.prepost.PreAuthorize;
 import com.clm.contactlistmanager.service.NoteService;
 import com.clm.contactlistmanager.entity.Note;
 import jakarta.validation.Valid;
-import java.util.List;
-
+/**
+ * This class is responsible for handling HTTP requests related to notes associated with contacts.
+ * It maps HTTP requests to respective service methods and provides endpoints for CRUD operations.
+ * The controller uses URI versioning for the API.
+ */
 @RestController
-@RequestMapping("/api/notes") // Sets the base URL for all endpoints in this controller to be /api/v1/notes
+@RequestMapping("/api/v1/notes") // This defines the base URL for version 1 for this controller
 public class NoteController {
 
     @Autowired
     private NoteService noteService;
 
-    // This method retrieves all the notes associated with contacts.
-    // Notes provide additional information about a contact, like:
-    // - Specific memories related to the contact.
-    // - Reminders about the contact's preferences.
-    // - Any other relevant information to remember about the contact.
+    // Retrieve all the notes associated with contacts.
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping
     public Page<Note> getAllNotes(Pageable pageable) {
         return noteService.findAll(pageable);
@@ -34,6 +33,7 @@ public class NoteController {
 
 
     // Get a specific note by its ID
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<Note> getNoteById(@PathVariable Long id) {
         // We ask the service to give us the note with this ID
@@ -42,12 +42,14 @@ public class NoteController {
     }
 
     // Add a new note
+    @PreAuthorize("hasRole('USER')")
     @PostMapping
     public ResponseEntity<Note> createNote(@Valid @RequestBody Note note) {
         return ResponseEntity.ok().body(noteService.addNote(note));
     }
 
     // Update an existing note
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<Note> updateNote(@PathVariable Long id, @Valid @RequestBody Note noteDetails) {
         Note note = noteService.getNoteById(id);
@@ -56,6 +58,7 @@ public class NoteController {
     }
 
     // Delete a note
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteNote(@PathVariable Long id) {
         noteService.deleteNote(id);
