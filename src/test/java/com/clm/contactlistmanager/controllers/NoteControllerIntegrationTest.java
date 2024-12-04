@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -37,6 +38,8 @@ public class NoteControllerIntegrationTest {
     // Test the retrieval of all notes.
     // It sends a GET request for all notes and expects a successful response with a list of notes.
     @Test
+    @WithMockUser(roles = "USER")
+
     public void testGetAllNotes() throws Exception {
         // Mocking service data
         Note note1 = new Note();
@@ -62,6 +65,7 @@ public class NoteControllerIntegrationTest {
     // Test retrieving a note by its ID.
     // It sends a GET request for a specific note ID and expects a successful response with the note data.
     @Test
+    @WithMockUser(roles = "USER") 
     public void testGetNoteById() throws Exception {
         Note mockNote = new Note();
         mockNote.setId(1L);
@@ -78,6 +82,7 @@ public class NoteControllerIntegrationTest {
     // Test updating an existing note.
     //It sends a PUT request with updated note data for a specific ID and expects a successful response with the updated data.
     @Test
+    @WithMockUser(roles = "ADMIN")
     public void testUpdateNote() throws Exception {
         Note existingNote = new Note();
         existingNote.setId(1L);
@@ -100,6 +105,7 @@ public class NoteControllerIntegrationTest {
     // Test deleting a note by its ID.
     // It sends a DELETE request for a specific note ID and expects a successful response indicating the note has been deleted.
     @Test
+    @WithMockUser(roles = "ADMIN")
     public void testDeleteNote() throws Exception {
         Note mockNote = new Note();
         mockNote.setId(1L);

@@ -37,6 +37,7 @@ public class ContactControllerIntegrationTest {
     //Test the creation of a new contact.
     //It sends a POST request with contact data and expects a successful response with the same data.
     @Test
+    @WithMockUser(roles = "USER")
     public void testGetAllContacts() throws Exception {
         // Mocking service data
         Contact contact1 = new Contact();
@@ -67,6 +68,7 @@ public class ContactControllerIntegrationTest {
     // Test updating an existing note.
     //It sends a PUT request with updated note data for a specific ID and expects a successful response with the updated data.
     @Test
+    @WithMockUser(roles = "ADMIN")
     public void testUpdateContact() throws Exception {
         Contact existingContact = new Contact();
         existingContact.setId(1L);
@@ -92,6 +94,7 @@ public class ContactControllerIntegrationTest {
     // Test deleting a contact by its ID.
     // It sends a DELETE request for a specific contact ID and expects a successful response indicating the contact has been deleted.
     @Test
+    @WithMockUser(roles = "ADMIN")
     public void testDeleteContact() throws Exception {
         Contact mockContact = new Contact();
         mockContact.setId(1L);
@@ -109,6 +112,8 @@ public class ContactControllerIntegrationTest {
     // Test retrieving a contact by its ID.
     // It sends a GET request for a specific contact ID and expects a successful response with the contact data.
     @Test
+    @WithMockUser(roles = "USER")
+
     public void testGetContactById() throws Exception {
         // ... [test code]
     }
