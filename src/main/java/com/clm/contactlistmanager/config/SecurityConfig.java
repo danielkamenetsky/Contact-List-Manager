@@ -1,5 +1,6 @@
 package com.clm.contactlistmanager.config;
-
+import org.springframework.web.cors.CorsConfiguration;
+import java.util.Arrays;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -47,15 +48,23 @@ public class SecurityConfig {
 
    @Bean
    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-       http.csrf(csrf -> csrf.disable())
-           .authorizeHttpRequests(auth -> auth
-               .requestMatchers(antMatcher(HttpMethod.DELETE, "/api/**")).hasRole("ADMIN")
-               .requestMatchers(antMatcher(HttpMethod.PUT, "/api/**")).hasRole("ADMIN")
-               .requestMatchers(antMatcher("/api/**")).hasAnyRole("ADMIN", "USER")
-               .anyRequest().authenticated()
-           )
-           .formLogin(Customizer.withDefaults());
+    http.cors(cors -> cors.configurationSource(request -> {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowCredentials(true);
+        config.setAllowedHeaders(Arrays.asList("*"));
+        return config;
+    }))
+    .csrf(csrf -> csrf.disable())
+    .authorizeHttpRequests(auth -> auth
+        .requestMatchers(antMatcher(HttpMethod.DELETE, "/api/**")).hasRole("ADMIN")
+        .requestMatchers(antMatcher(HttpMethod.PUT, "/api/**")).hasRole("ADMIN")
+        .requestMatchers(antMatcher("/api/**")).hasAnyRole("ADMIN", "USER")
+        .anyRequest().authenticated()
+    )
+    .formLogin(Customizer.withDefaults());
 
-       return http.build();
-   }
+    return http.build();
+    }
 }

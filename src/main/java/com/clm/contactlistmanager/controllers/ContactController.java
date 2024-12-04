@@ -1,5 +1,5 @@
 package com.clm.contactlistmanager.controllers;
-
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import com.clm.contactlistmanager.entity.Contact;
@@ -7,9 +7,6 @@ import com.clm.contactlistmanager.service.ContactService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
@@ -22,6 +19,8 @@ import jakarta.validation.Valid;
  */
 @RestController
 @RequestMapping("/api/v1/contacts")  // Define the base URL for version 1 for this controller
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+
 public class ContactController {
 
     @Autowired
