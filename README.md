@@ -1,4 +1,4 @@
-# Capco-contact-list-manager
+# contact-list-manager
 
 This project is designed to manage contacts and notes. It offers RESTful endpoints to handle CRUD operations for both contacts and notes.
 
