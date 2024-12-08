@@ -1,6 +1,7 @@
 // src/components/ContactsList.tsx
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { AddContact } from "./AddContact";
 
 interface Contact {
   id: number;
@@ -10,20 +11,37 @@ interface Contact {
   phoneNumber: string;
   address: string;
 }
-
 export const ContactsList = () => {
   const [contacts, setContacts] = useState<Contact[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  useEffect(() => {
+  const refreshContacts = () => {
+    setLoading(true);
     axios
       .get("http://localhost:8080/api/v1/contacts", { withCredentials: true })
-      .then((res) => setContacts(res.data.content))
-      .catch((err) => console.error(err));
+      .then((res) => {
+        setContacts(res.data.content || []);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        setError("Failed to fetch contacts");
+        setLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    refreshContacts();
   }, []);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
 
   return (
     <div>
       <h1>Contacts</h1>
+      <AddContact onContactAdded={refreshContacts} />
       <table>
         <thead>
           <tr>
