@@ -16,21 +16,27 @@ export const ContactsList = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const refreshContacts = () => {
-    setLoading(true);
-    axios
-      .get("http://localhost:8080/api/v1/contacts", { withCredentials: true })
-      .then((res) => {
-        setContacts(res.data.content || []);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error(err);
-        setError("Failed to fetch contacts");
-        setLoading(false);
-      });
+  const refreshContacts = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        "http://localhost:8080/api/v1/contacts",
+        {
+          withCredentials: true,
+          headers: {
+            Accept: "application/json",
+          },
+        }
+      );
+      setContacts(response.data.content || []);
+      setError("");
+    } catch (err) {
+      console.error("Error fetching contacts:", err);
+      setError("Failed to fetch contacts");
+    } finally {
+      setLoading(false);
+    }
   };
-
   useEffect(() => {
     refreshContacts();
   }, []);

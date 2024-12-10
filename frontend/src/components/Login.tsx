@@ -20,24 +20,28 @@ export const Login = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const formData = new URLSearchParams(); // Change from FormData
+      const formData = new URLSearchParams();
       formData.append("username", form.username);
       formData.append("password", form.password);
 
-      await axios.post(
-        "http://localhost:8080/j_spring_security_check",
-        formData.toString(),
-        {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-        }
-      );
+      await axios.post("http://localhost:8080/login", formData, {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        maxRedirects: 0, // Add this
+      });
+
       login();
       navigate("/contacts");
-    } catch (err) {
-      console.error(err); // Add this to see detailed error
+    } catch (err: any) {
+      // If we get 302, that means successful login
+      if (err.response?.status === 302) {
+        login();
+        navigate("/contacts");
+        return;
+      }
+      console.error("Login error:", err);
       setError("Invalid credentials");
     }
   };
