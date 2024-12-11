@@ -57,7 +57,7 @@ public class ContactController {
 
 
     // Update a contact
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN', 'USER')")
     @PutMapping("/{id}")
     public ResponseEntity<Contact> updateContact(@PathVariable Long id, @Valid @RequestBody Contact contactDetails) {
         Contact contact = contactService.getContactById(id);
