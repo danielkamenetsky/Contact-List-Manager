@@ -12,16 +12,19 @@ interface Contact {
   phoneNumber: string;
   address: string;
 }
+
 export const ContactsList = () => {
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
 
-  const refreshContacts = async () => {
+  const refreshContacts = async (page = 0) => {
     try {
       setLoading(true);
       const response = await axios.get(
-        "http://localhost:8080/api/v1/contacts",
+        `http://localhost:8080/api/v1/contacts?page=${page}`,
         {
           withCredentials: true,
           headers: {
@@ -30,6 +33,8 @@ export const ContactsList = () => {
         }
       );
       setContacts(response.data.content || []);
+      setTotalPages(response.data.totalPages);
+      setCurrentPage(page);
       setError("");
     } catch (err) {
       console.error("Error fetching contacts:", err);
@@ -38,19 +43,39 @@ export const ContactsList = () => {
       setLoading(false);
     }
   };
+
   useEffect(() => {
-    refreshContacts();
+    refreshContacts(0);
   }, []);
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+  const Pagination = () => (
+    <div className="mt-4 flex justify-center space-x-2">
+      <button
+        onClick={() => refreshContacts(currentPage - 1)}
+        disabled={currentPage === 0}
+        className="px-4 py-2 bg-green-600 text-white rounded disabled:bg-gray-300"
+      >
+        Previous
+      </button>
+      <span className="px-4 py-2">
+        Page {currentPage + 1} of {totalPages}
+      </span>
+      <button
+        onClick={() => refreshContacts(currentPage + 1)}
+        disabled={currentPage === totalPages - 1}
+        className="px-4 py-2 bg-green-600 text-white rounded disabled:bg-gray-300"
+      >
+        Next
+      </button>
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
       <div className="max-w-7xl mx-auto px-4 py-6">
         <div className="mb-8">
-          <AddContact onContactAdded={refreshContacts} />
+          <AddContact onContactAdded={() => refreshContacts(0)} />
         </div>
 
         {loading ? (
@@ -95,6 +120,7 @@ export const ContactsList = () => {
                 ))}
               </tbody>
             </table>
+            <Pagination />
           </div>
         )}
       </div>
