@@ -2,6 +2,7 @@ services:
   - type: web
     name: contact-list-manager
     env: java
+    runtime: java17
     buildCommand: ./mvnw clean install
     startCommand: java -jar target/*.jar
     plan: free
