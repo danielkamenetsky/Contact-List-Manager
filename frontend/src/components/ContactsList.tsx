@@ -49,6 +49,7 @@ export const ContactsList = () => {
   useEffect(() => {
     refreshContacts(0);
   }, []);
+  if (loading) return <div>Loading...</div>;
 
   const Pagination = () => (
     <div className="mt-4 flex justify-center space-x-2">
@@ -75,6 +76,7 @@ export const ContactsList = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
+      {error && <div className="text-red-600 p-4">{error}</div>}
       <div className="max-w-7xl mx-auto px-4 py-6">
         <AddContact onContactAdded={() => refreshContacts(0)} />
         <div className="bg-white shadow rounded-lg mt-6">
